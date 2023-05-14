@@ -13,10 +13,10 @@ const polar_api = {
         })
         response.data.recharges.forEach(element => {
             // changing element.polar_user from 'https://polaraccesslink.com/v3/users/12345678' to '12345678'
-            
+
             element.polar_user = element.polar_user.split('/').pop();
         });
-  
+        console.log(`[${new Date().toLocaleString()}] Polar API:sta haettu tiedot.`)
         return response.data;
     },
 
@@ -58,6 +58,7 @@ const polar_api = {
             let cookies = (await client.send('Network.getAllCookies')).cookies;
 
             const token = cookies.find(cookie => cookie.name === 'token');
+            console.log(`[${new Date().toLocaleString()}] Kirjauduttu Polar API:in.`)
             return token;
         } catch (error) {
             console.log(error);

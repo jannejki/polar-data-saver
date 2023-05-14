@@ -49,15 +49,15 @@ dotenv.config();
 
         if (newData.length === 0) {
             await sendEmail({
-                mail: 'Tietokantaan ei tallennettu uusia öitä.'
+                mail: 'Tietokantaan ei tallennettu uusia Nightly Recharge tietoja.'
             });
-            console.log(`[${new Date().toLocaleString()}] Tietokantaan ei tallennettu uusia öitä. ${new Date().toLocaleString()}`)
+            console.log(`[${new Date().toLocaleString()}] Tietokantaan ei tallennettu uusia Nightly Recharge tietoja.`)
 
         } else {
             await sendEmail({
-                mail: `Tietokantaan tallennettu seuraavien öiden tiedot:\n\n${newData.map((recharge) => recharge.date).join('\n')}.`
+                mail: `Tietokantaan tallennettu seuraavien öiden Nightly Recharge tiedot:\n\n${newData.map((recharge) => recharge.date).join('\n')}.`
             });
-            console.log(`[${new Date().toLocaleString()}] Tietokantaan tallennettu seuraavien öiden tiedot: ${newData.map((recharge) => recharge.date).join(', ')}.`);
+            console.log(`[${new Date().toLocaleString()}] Tietokantaan tallennettu seuraavien öiden Nightly Recharge tiedot: ${newData.map((recharge) => recharge.date).join(', ')}.`);
         }
 
     } catch (error) {
