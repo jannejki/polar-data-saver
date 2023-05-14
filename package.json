@@ -1,0 +1,23 @@
+{
+  "name": "polar-data-saver",
+  "version": "1.0.0",
+  "description": "Saves polar data to database for later review",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon start.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "axios-retry": "^3.4.0",
+    "dotenv": "^16.0.3",
+    "jsonwebtoken": "^9.0.0",
+    "knex": "^2.4.2",
+    "mariadb": "^3.1.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.3.0",
+    "nodemailer": "^6.9.2",
+    "puppeteer": "^20.2.0"
+  }
+}
