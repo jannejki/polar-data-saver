@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const sendEmail = async(letter) => {
+    if(process.env.NODE_ENV == 'DEVELOPMENT') return false;
     return new Promise((resolve, reject) => {
         const transporter = nodemailer.createTransport({
             service: process.env.EMAILER_SERVICE,

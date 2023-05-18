@@ -1,15 +1,14 @@
 import knex from "../knex";
 
-const nightlyRecharge = {
-    get: async (params) => {
+const nightlyRechargeModel = {
+    getFromDB: async (params) => {
         return await knex('NIGHTLY_RECHARGES').where(params);
     },
 
     save: async (params) => {
         try {
-
             const id = await knex('NIGHTLY_RECHARGES').insert(params);
-            return await nightlyRecharge.get({ ID: id[0] });
+            return (await nightlyRechargeModel.getFromDB({ ID: id[0] }));
         }catch(error) {
             return false;
         }
@@ -17,4 +16,4 @@ const nightlyRecharge = {
 
 }
 
-export default nightlyRecharge;
+export default nightlyRechargeModel;
