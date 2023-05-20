@@ -3,7 +3,7 @@ import cardioloadModel from "../Database/Models/cardioLoadModel";
 const cardioloadController = {
     saveCardioload: async (data, user) => {
         const newData = [];
-
+        
         try {
             // setting cardio load level data to the same level as the other data so it can be saved to the same table
             for (let day of data) {

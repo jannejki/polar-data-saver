@@ -27,24 +27,17 @@ const polar_api = {
             },
         })
 
-        /*
-        response.data.recharges.forEach(element => {
-            // changing element.polar_user from 'https://polaraccesslink.com/v3/users/12345678' to '12345678'
-
-            element.polar_user = element.polar_user.split('/').pop();
-        });*/
-        
         console.log(`[${new Date().toLocaleString()}] Polar API:sta haettu tiedot.`)
         return response.data;
     },
-
 
     oauthLogin: async () => {
         try {
             const browser = await puppeteer.launch({
                 executablePath: process.env.CHROME_PATH,
                 headless: true,
-                IgnoreHTTPSErrors: true
+                IgnoreHTTPSErrors: true,
+                args: ['--no-sandbox', '--disable-setuid-sandbox']
             });
             const page = await browser.newPage();
             await page.setViewport({ width: 1920, height: 1280 });

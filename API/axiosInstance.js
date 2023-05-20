@@ -1,63 +1,69 @@
 import axios from "axios";
 import axiosRetry from "axios-retry";
-import https from 'https'
-import dotenv from 'dotenv'
+import https from 'https';
 
-dotenv.config();
-const apiRoute =  process.env.PROD_API_ROUTE;
+let nightlyRechargeClient;
+let cardioLoadClient;
 
-//=====================================================//
-//  nightly recharge client
-//=====================================================//
-// defining the axios client for the nightlyRechargeAPI service
-const nightlyRechargeClient = axios.create({
-    baseURL: `${apiRoute}/nightlyRecharge`,
-})
+const initAxios = async () => {
+    const apiRoute = process.env.PROD_API_ROUTE;
 
-nightlyRechargeClient.defaults.httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-})
+    //=====================================================//
+    //  nightly recharge client
+    //=====================================================//
+    // defining the axios client for the nightlyRechargeAPI service
+    nightlyRechargeClient = axios.create({
+        baseURL: `${apiRoute}/nightlyRecharge`,
+    })
 
-axiosRetry(nightlyRechargeClient, {
-    retries: 3, // number of retries
-    retryDelay: (retryCount) => {
-        console.log(`Retry attempt: ${retryCount}`)
+    nightlyRechargeClient.defaults.httpsAgent = new https.Agent({
+        rejectUnauthorized: false,
+    })
 
-        // waiting 2 seconds between each retry
-        return 2000
-    },
-    retryCondition: (error) => {
-        // retrying only on 503 HTTP errors
-        console.log(error);
-        return error.response.status === 503
-    },
-})
+    axiosRetry(nightlyRechargeClient, {
+        retries: 3, // number of retries
+        retryDelay: (retryCount) => {
+            console.log(`Retry attempt: ${retryCount}`)
 
-//=====================================================//
-//  cardio load client
-//=====================================================//
-// defining the axios client for the nightlyRechargeAPI service
-const cardioLoadClient = axios.create({
-    baseURL: `${apiRoute}/cardioload`,
-})
+            // waiting 2 seconds between each retry
+            return 2000
+        },
+        retryCondition: (error) => {
+            // retrying only on 503 HTTP errors
+            console.log(error);
+            return error.response.status === 503
+        },
+    })
 
-cardioLoadClient.defaults.httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-})
+    //=====================================================//
+    //  cardio load client
+    //=====================================================//
+    // defining the axios client for the nightlyRechargeAPI service
+    cardioLoadClient = axios.create({
+        baseURL: `${apiRoute}/cardioload`,
+    })
 
-axiosRetry(cardioLoadClient, {
-    retries: 3, // number of retries
-    retryDelay: (retryCount) => {
-        console.log(`Retry attempt: ${retryCount}`)
+    cardioLoadClient.defaults.httpsAgent = new https.Agent({
+        rejectUnauthorized: false,
+    })
 
-        // waiting 2 seconds between each retry
-        return 2000
-    },
-    retryCondition: (error) => {
-        // retrying only on 503 HTTP errors
-        console.log(error);
-        return error.response.status === 503
-    },
-})
+    axiosRetry(cardioLoadClient, {
+        retries: 3, // number of retries
+        retryDelay: (retryCount) => {
+            console.log(`Retry attempt: ${retryCount}`)
+
+            // waiting 2 seconds between each retry
+            return 2000
+        },
+        retryCondition: (error) => {
+            // retrying only on 503 HTTP errors
+            console.log(error);
+            return error.response.status === 503
+        },
+    })
+
+}
+
+export default initAxios;
 
 export { nightlyRechargeClient, cardioLoadClient }
