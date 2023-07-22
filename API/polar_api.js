@@ -63,7 +63,7 @@ const polar_api = {
             await page.click('#login');
 
 
-            await page.waitForNetworkIdle(5000);
+            await page.waitForNavigation();
 
             const client = await page.target().createCDPSession();
             let cookies = (await client.send('Network.getAllCookies')).cookies;

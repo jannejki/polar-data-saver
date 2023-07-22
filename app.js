@@ -41,10 +41,10 @@ import initEmailer, { sendEmail } from './Utils/emailer.js';
             console.log(`[${new Date().toLocaleString()}]  Tietokantaan tallennettu seuraavien öiden Nightly Recharge tiedot:\n\n${savedNightlyRecharge.map((recharge) => recharge.date).join('\n')} \n\nSekä seuraavat cardio load päivät: \n\n${savedCardioload.map((e) => e.date).join('\n')}.`);
         }
 
-    } catch (error) {/*
+    } catch (error) {
         await sendEmail({
             mail: `Tietokantaan tallennus epäonnistui klo: ${new Date().toLocaleString()}.\nVirhe: ${error}`
-        });*/
+        });
 
         console.log(`[${new Date().toLocaleString()}] Tietokantaan tallennus epäonnistui.\nVirhe: ${error}`);
     } finally {
