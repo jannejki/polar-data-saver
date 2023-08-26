@@ -6,39 +6,40 @@ import initAxios from './API/axiosInstance';
 
 import nightlyRechargeController from './Controllers/nightlyRechargeController';
 import cardioloadController from './Controllers/cardioloadController';
-import jwt from 'jsonwebtoken';
 import initEmailer, { sendEmail } from './Utils/emailer.js';
-
+import userModel from './Database/Models/userModel';
 (async () => {
 
     initAxios();
     initEmailer();
     try {
-        const token = await polar_api.oauthLogin();
-        const decoded = await jwt.decode(token.value);
+        const userSettings = await userModel.getSettings({ AUTOSAVE: true });
 
-        const data = await polar_api.getNightlyRecharge(token.value);
-        const savedNightlyRecharge = await nightlyRechargeController.saveNightlyRecharge(data);
+        for (let user of userSettings) {
+            const userInfo = await userModel.get({ ID: user.USER_ID });
+            if (userInfo[0].access_token == '') continue;
 
-        const cardioload = await polar_api.getCardioLoad(token.value);
-        const savedCardioload = await cardioloadController.saveCardioload(cardioload, decoded.user);
+            const data = await polar_api.getNightlyRecharge(userInfo[0].access_token);
+            const savedNightlyRecharge = await nightlyRechargeController.saveNightlyRecharge(data);
 
-        if (savedNightlyRecharge.length === 0 && savedCardioload.length === 0) {
-            await sendEmail({
-                mail: 'Tietokantaan ei tallennettu uusia tietoja.'
-            });
-            console.log(`[${new Date().toLocaleString()}] Tietokantaan ei tallennettu uusia tietoja.`)
+            const cardioload = await polar_api.getCardioLoad(userInfo[0].access_token);
+            const savedCardioload = await cardioloadController.saveCardioload(cardioload, userInfo[0]['polar-user-id']);
 
-        } else {
+            if (savedNightlyRecharge.length === 0 && savedCardioload.length === 0) {
+                await sendEmail({
+                    mail: 'Tietokantaan ei tallennettu uusia tietoja.'
+                });
+                console.log(`[${new Date().toLocaleString()}] Tietokantaan ei tallennettu uusia tietoja.`)
 
-
-            await sendEmail({
-                mail: `Tietokantaan tallennettu seuraavien 
+            } else {
+                await sendEmail({
+                    mail: `Tietokantaan tallennettu seuraavien 
                          öiden Nightly Recharge tiedot:\n\n${savedNightlyRecharge.length > 0 ? savedNightlyRecharge.map((recharge) => recharge.date).join('\n') : ''} 
                          \n\nSekä seuraavat cardio load päivät: \n\n${savedCardioload.length > 0 ? savedCardioload.map((e) => e.date).join('\n') : ''}.`
-            });
+                });
 
-            console.log(`[${new Date().toLocaleString()}]  Tietokantaan tallennettu seuraavien öiden Nightly Recharge tiedot:\n\n${savedNightlyRecharge.map((recharge) => recharge.date).join('\n')} \n\nSekä seuraavat cardio load päivät: \n\n${savedCardioload.map((e) => e.date).join('\n')}.`);
+                console.log(`[${new Date().toLocaleString()}]  Tietokantaan tallennettu seuraavien öiden Nightly Recharge tiedot:\n\n${savedNightlyRecharge.map((recharge) => recharge.date).join('\n')} \n\nSekä seuraavat cardio load päivät: \n\n${savedCardioload.map((e) => e.date).join('\n')}.`);
+            }
         }
 
     } catch (error) {

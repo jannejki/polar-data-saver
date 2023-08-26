@@ -10,6 +10,10 @@ const userModel = {
         const id =  await knex('USERS').insert(params);
         return await userModel.get({id: id[0]});
     },
+
+    getSettings: async(params = {}) => {
+        return await knex('USER_SETTINGS').where(params);
+    }
 }
 
 export default userModel;
