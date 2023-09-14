@@ -17,7 +17,6 @@
     "mariadb": "^3.1.2",
     "mysql": "^2.18.1",
     "mysql2": "^3.3.0",
-    "nodemailer": "^6.9.2",
-    "puppeteer": "^20.2.0"
+    "nodemailer": "^6.9.2"
   }
 }
